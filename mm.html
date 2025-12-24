@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúng Mình Yêu Nhau 💕</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&family=Dancing+Script:wght@700&display=swap');
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #ffb6c1, #ff69b4, #da70d6);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+
+        /* ====== MÀN HÌNH KHÓA ====== */
+        #lock {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to bottom, #ff69b4, #da70d6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #lock h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        #lock input {
+            padding: 12px;
+            border-radius: 20px;
+            border: none;
+            text-align: center;
+            font-size: 1.1rem;
+            width: 200px;
+            outline: none;
+        }
+
+        #lock button {
+            margin-top: 15px;
+            padding: 10px 30px;
+            border-radius: 20px;
+            border: none;
+            background: white;
+            color: #ff1493;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        #error {
+            margin-top: 10px;
+            color: #ffe4e1;
+            font-size: 0.9rem;
+        }
+
+        /* ====== NỘI DUNG CHÍNH ====== */
+        #content {
+            display: none;
+            min-height: 100vh;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-text {
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .counter-box {
+            background: rgba(255,255,255,0.25);
+            border-radius: 25px;
+            padding: 15px 30px;
+            text-align: center;
+        }
+
+        .days {
+            font-size: 2.4rem;
+            font-weight: 600;
+        }
+
+        .time {
+            font-size: 1.5rem;
+        }
+
+        .couple {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255,255,255,0.6);
+        }
+
+        .heart {
+            font-size: 3rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            50% { transform: scale(1.2); }
+        }
+
+        .name {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.95rem;
+        }
+
+        .start-date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+        }
+
+        .bottom-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ====== KHÓA ====== -->
+<div id="lock">
+    <h1>🔐 Nhập mật khẩu </h1>
+    <input type="password" id="password" placeholder="NHẬP ĐÂY">
+    <button onclick="checkPassword()">Mở khóa ❤️</button>
+    <div id="error"></div>
+</div>
+
+<!-- ====== NỘI DUNG ====== -->
+<div id="content">
+    <div class="top-text">❤️ ANH YÊU EM ❤️</div>
+
+    <div class="counter-box">
+        <div class="days" id="days">0 DAYS</div>
+        <div class="time" id="time">00:00:00</div>
+    </div>
+
+    <div class="couple">
+        <div>
+            <img src="anh.jpeg" class="avatar">
+            <div class="name">Minh Quân</div>
+        </div>
+
+        <div class="heart">💗</div>
+
+        <div>
+            <img src="em.jpeg" class="avatar">
+            <div class="name">Kiều Thơm</div>
+        </div>
+    </div>
+
+    <div class="start-date">💞 10-12-2025 💞</div>
+    <div class="bottom-message">❤️ MÃI MÃI BÊN NHAU NHÉ ❤️</div>
+</div>
+
+<audio id="music" loop>
+    <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // ====== MẬT KHẨU THEO NGÀY ======
+    function todayPassword() {
+        const d = new Date();
+        const day = String(d.getDate()).padStart(2,'0');
+        const month = String(d.getMonth()+1).padStart(2,'0');
+        const year = d.getFullYear();
+        return day + month + year;
+    }
+
+    function checkPassword() {
+        const input = document.getElementById("password").value;
+        if (input === todayPassword()) {
+            document.getElementById("lock").style.display = "none";
+            document.getElementById("content").style.display = "flex";
+            music.play().catch(()=>{});
+        } else {
+            document.getElementById("error").innerText = "❌ Sai mật khẩu rồi";
+        }
+    }
+
+    // ====== ĐẾM NGÀY YÊU ======
+    const startDate = new Date("2025-12-10");
+    function updateTime() {
+        const now = new Date();
+        const diff = now - startDate;
+        const days = Math.floor(diff / 86400000);
+        const h = Math.floor(diff / 3600000) % 24;
+        const m = Math.floor(diff / 60000) % 60;
+        const s = Math.floor(diff / 1000) % 60;
+        daysEl.innerText = days + " DAYS";
+        timeEl.innerText =
+            String(h).padStart(2,'0') + ":" +
+            String(m).padStart(2,'0') + ":" +
+            String(s).padStart(2,'0');
+    }
+
+    const daysEl = document.getElementById("days");
+    const timeEl = document.getElementById("time");
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    const music = document.getElementById("music");
+    music.volume = 0.4;
+</script>
+
+</body>
+</html>
